@@ -4,7 +4,8 @@ from langsmith import Client
 
 load_dotenv()
 
-DATASET_NAME = "user-events-to-actions"  # change if you want separate staging/prod sets
+DATASET_NAME = "events-state-ds-aug8"  # change if you want separate staging/prod sets
+DATASET_ID = "bae9bb4c-7c25-4427-9b0e-d013da94f281"  # existing dataset ID
 
 def ls_client() -> Client:
     """

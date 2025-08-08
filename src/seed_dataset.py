@@ -1,13 +1,20 @@
 from langsmith import Client
-from utils import ls_client, DATASET_NAME
+from utils import ls_client, DATASET_NAME, DATASET_ID
 
 def main():
     client: Client = ls_client()
 
-    ds = client.create_dataset(
-        dataset_name=DATASET_NAME,
-        description="Map (user state, events[]) to state-machine actions[]"
-    )
+    # Use existing dataset by ID
+    try:
+        ds = client.read_dataset(dataset_id=DATASET_ID)
+        print(f"Using existing dataset '{ds.name}' (id={ds.id})")
+    except Exception:
+        # Fallback: create new dataset if ID not found
+        ds = client.create_dataset(
+            dataset_name=DATASET_NAME,
+            description="Map (user state, events[]) to state-machine actions[]"
+        )
+        print(f"Created new dataset '{DATASET_NAME}' (id={ds.id})")
 
     examples = [
         {
@@ -41,7 +48,7 @@ def main():
     ]
 
     client.create_examples(dataset_id=ds.id, examples=examples)
-    print(f"Seeded {len(examples)} examples into dataset '{DATASET_NAME}' (id={ds.id})")
+    print(f"Added {len(examples)} examples to dataset '{ds.name}' (id={ds.id})")
 
 if __name__ == "__main__":
     main()

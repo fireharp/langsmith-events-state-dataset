@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  lsevents:
+    build: .
+    image: lsevents
+    env_file: .env
+    volumes:
+      - ./exports:/out
+      - ./examples:/examples
+    working_dir: /app
+    command: ["--help"]
+
+  # Quick aliases for common operations
+  seed:
+    extends: lsevents
+    command: ["seed"]
+
+  list:
+    extends: lsevents
+    command: ["list"]
+
+  eval:
+    extends: lsevents
+    command: ["eval", "--verbose"]
+
+  export:
+    extends: lsevents
+    command: ["export", "--out", "/out/data.jsonl"]
